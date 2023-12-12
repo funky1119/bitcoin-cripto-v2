@@ -1,30 +1,46 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
+import CONST from "../utils/Const";
+import { ICoinInfo, ICoinPriceInfo } from "../models/Coin";
 
 interface ICoinParams {
   coinId?: string;
 }
 
-interface ICoinData {
+interface ICoinState {
   state: { name: string };
 }
 
 function Coin() {
   const { coinId }: ICoinParams = useParams();
-  const { state }: ICoinData = useLocation();
+  const { state }: ICoinState = useLocation();
   const [loading, setLoading] = useState(true);
+  const [info, setInfo] = useState<ICoinInfo>();
+  const [priceInfo, setPriceInfo] = useState<ICoinPriceInfo>();
 
   useEffect(() => {
-    setLoading(false);
-  }, []);
+    (async () => {
+      const infoData = await (
+        await fetch(`${CONST.PAPRIKA_URL}/coins/${coinId}`)
+      ).json();
+      const priceData = await (
+        await fetch(`${CONST.PAPRIKA_URL}/tickers/${coinId}`)
+      ).json();
+
+      setInfo(infoData);
+      setPriceInfo(priceData);
+      setLoading(false);
+    })();
+  }, [coinId]);
 
   return (
     <Container>
       <Header>
-        <Title>{state?.name || "Loading"}</Title>
+        <Title>{state?.name || (loading ? "Loading" : info?.name)}</Title>
       </Header>
-      {loading ? <Loader>Loading...</Loader> : <h1>Coin: {coinId}</h1>}
+      {loading ? <Loader>Loading...</Loader> : <span>{info?.description}</span>}
+      <Outlet context={{ coinId }} />
     </Container>
   );
 }
