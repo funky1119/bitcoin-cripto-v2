@@ -1,10 +1,9 @@
 import { useQuery } from "react-query";
 import { ICoinParams, IHistorycal } from "../models/Coin";
 import { coinHistoryApi } from "../api";
-import { useMatch, useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import ApexChart from "react-apexcharts";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 
 function Chart() {
@@ -12,7 +11,7 @@ function Chart() {
   const { isLoading, data } = useQuery<IHistorycal[]>(["ohlcv", coinId], () =>
     coinHistoryApi(coinId)
   );
-  const [chartType, setChartType] = useState("line");
+  const [chartType, setChartType] = useState("candlestick");
 
   const _onPress = (type: string) => () => {
     setChartType(type);
@@ -101,6 +100,9 @@ function Chart() {
                 yaxis: {
                   axisTicks: { show: true },
                   show: false,
+                },
+                tooltip: {
+                  enabled: true,
                 },
               }}
               series={[

@@ -1,4 +1,5 @@
 import { Outlet, useLocation, useMatch, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import {
   ICoinInfo,
@@ -22,13 +23,19 @@ function Coin() {
   );
   const { isLoading: priceLoading, data: priceData } = useQuery<ICoinPriceInfo>(
     ["price", coinId],
-    () => priceDataApi(coinId)
+    () => priceDataApi(coinId),
+    {
+      refetchInterval: 5000,
+    }
   );
 
   const loading = infoLoading || priceLoading;
 
   return (
     <Container>
+      <Helmet>
+        <title>{state?.name || (loading ? "Loading" : infoData?.name)}</title>
+      </Helmet>
       <Header>
         <Title>{state?.name || (loading ? "Loading" : infoData?.name)}</Title>
       </Header>
@@ -46,8 +53,8 @@ function Coin() {
               <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source</span>
-              <span>{infoData?.open_source ? "YES" : "NO"}</span>
+              <span>Price</span>
+              <span>${priceData?.quotes.USD.price.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>
