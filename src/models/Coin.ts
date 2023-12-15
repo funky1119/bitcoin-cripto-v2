@@ -1,3 +1,11 @@
+interface ICoinParams {
+  coinId?: string;
+}
+
+interface ICoinState {
+  state: { name: string };
+}
+
 interface ICoinInfo {
   id: string;
   name: string;
@@ -54,4 +62,15 @@ interface ICoinPriceInfo {
   quotes: { USD: ICoinPriceQuotes };
 }
 
-export type { ICoinInfo, ICoinPriceInfo };
+interface IHistorycal {
+  close: string;
+  high: string;
+  low: string;
+  market_cap: string;
+  open: string;
+  time_close: number;
+  time_open: number;
+  volume: string;
+}
+
+export type { ICoinParams, ICoinState, ICoinInfo, ICoinPriceInfo, IHistorycal };

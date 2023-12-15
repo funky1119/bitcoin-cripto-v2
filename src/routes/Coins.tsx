@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import CONST from "../utils/Const";
 import { useQuery } from "react-query";
 import { coinsApi } from "../api";
 
@@ -30,7 +29,8 @@ function Coins() {
             <Coin key={coin.id}>
               <Link to={coin.id} state={{ name: coin.name }}>
                 <Img
-                  src={`${CONST.COIN_ICON}/${coin.symbol.toLowerCase()}`}
+                  src={`https://cryptocurrencyliveprices.com/img/${coin.id.toLowerCase()}.png`}
+                  // src={`${CONST.COIN_ICON}/${coin.symbol.toLowerCase()}`}
                   alt={coin.id}
                 />
                 {coin.name} &rarr;

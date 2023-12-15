@@ -1,6 +1,6 @@
 const CONST = {
   PAPRIKA_URL: "https://api.coinpaprika.com/v1",
-  COIN_ICON: "https://coinicons-api.vercel.app/api/icon",
+  OHLCV_URL: "https://ohlcv-api.nomadcoders.workers.dev?",
 };
 
 export default CONST;

@@ -1,46 +1,36 @@
-import { useEffect, useState } from "react";
 import { Outlet, useLocation, useMatch, useParams } from "react-router-dom";
 import styled from "styled-components";
-import CONST from "../utils/Const";
-import { ICoinInfo, ICoinPriceInfo } from "../models/Coin";
+import {
+  ICoinInfo,
+  ICoinParams,
+  ICoinPriceInfo,
+  ICoinState,
+} from "../models/Coin";
 import { Link } from "react-router-dom";
-
-interface ICoinParams {
-  coinId?: string;
-}
-
-interface ICoinState {
-  state: { name: string };
-}
+import { useQuery } from "react-query";
+import { infoDataApi, priceDataApi } from "../api";
 
 function Coin() {
-  const { coinId }: ICoinParams = useParams();
+  const { coinId = "" }: ICoinParams = useParams();
   const { state }: ICoinState = useLocation();
-  const [loading, setLoading] = useState(true);
-  const [info, setInfo] = useState<ICoinInfo>();
-  const [priceInfo, setPriceInfo] = useState<ICoinPriceInfo>();
   const chartMatch = useMatch("/:coinId/chart");
   const priceMatch = useMatch("/:coinId/price");
 
-  useEffect(() => {
-    (async () => {
-      const infoData = await (
-        await fetch(`${CONST.PAPRIKA_URL}/coins/${coinId}`)
-      ).json();
-      const priceData = await (
-        await fetch(`${CONST.PAPRIKA_URL}/tickers/${coinId}`)
-      ).json();
+  const { isLoading: infoLoading, data: infoData } = useQuery<ICoinInfo>(
+    ["info", coinId],
+    () => infoDataApi(coinId)
+  );
+  const { isLoading: priceLoading, data: priceData } = useQuery<ICoinPriceInfo>(
+    ["price", coinId],
+    () => priceDataApi(coinId)
+  );
 
-      setInfo(infoData);
-      setPriceInfo(priceData);
-      setLoading(false);
-    })();
-  }, [coinId]);
+  const loading = infoLoading || priceLoading;
 
   return (
     <Container>
       <Header>
-        <Title>{state?.name || (loading ? "Loading" : info?.name)}</Title>
+        <Title>{state?.name || (loading ? "Loading" : infoData?.name)}</Title>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
@@ -48,27 +38,27 @@ function Coin() {
         <>
           <Overview>
             <OverviewItem>
-              <span>Rank:</span>
-              <span>{info?.rank}</span>
+              <span>Rank</span>
+              <span>{infoData?.rank}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Symbol:</span>
-              <span>${info?.symbol}</span>
+              <span>Symbol</span>
+              <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{info?.open_source ? "YES" : "NO"}</span>
+              <span>Open Source</span>
+              <span>{infoData?.open_source ? "YES" : "NO"}</span>
             </OverviewItem>
           </Overview>
-          <Description>{info?.description}</Description>
+          <Description>{infoData?.description}</Description>
           <Overview>
             <OverviewItem>
-              <span>Total Suply:</span>
-              <span>{priceInfo?.total_supply}</span>
+              <span>Total Suply</span>
+              <span>{priceData?.total_supply}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Max Suply:</span>
-              <span>{priceInfo?.max_supply}</span>
+              <span>Max Suply</span>
+              <span>{priceData?.max_supply}</span>
             </OverviewItem>
           </Overview>
 

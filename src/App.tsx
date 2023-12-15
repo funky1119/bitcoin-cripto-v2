@@ -4,6 +4,7 @@ import router from "./router";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const queryClient = new QueryClient();
 
@@ -13,6 +14,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <RouterProvider router={router}></RouterProvider>
+        <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
     </QueryClientProvider>
   );
