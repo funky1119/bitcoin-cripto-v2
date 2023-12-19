@@ -19,7 +19,7 @@ import { useQuery } from "react-query";
 import { infoDataApi, priceDataApi } from "../api";
 
 function Coin() {
-  const { coinId = "" }: ICoinParams = useParams();
+  const { coinId = "btc-bitcoin" }: ICoinParams = useParams();
   const { state }: ICoinState = useLocation();
   const chartMatch = useMatch("/:coinId/chart");
   const priceMatch = useMatch("/:coinId/price");
@@ -31,10 +31,10 @@ function Coin() {
   );
   const { isLoading: priceLoading, data: priceData } = useQuery<ICoinPriceInfo>(
     ["price", coinId],
-    () => priceDataApi(coinId),
-    {
-      refetchInterval: 5000,
-    }
+    () => priceDataApi(coinId)
+    // {
+    //   refetchInterval: 5000,
+    // }
   );
 
   const loading = infoLoading || priceLoading;

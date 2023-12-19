@@ -12,10 +12,28 @@ function Chart() {
   const { isLoading, data } = useQuery<IHistorycal[]>(["ohlcv", coinId], () =>
     coinHistoryApi(coinId)
   );
-  const [chartType, setChartType] = useState("candlestick");
+  const [chartType, setChartType] = useState("line");
 
   const _onPress = (type: string) => () => {
     setChartType(type);
+  };
+  const lineData = {
+    xaxis: data ? data.map((info) => info.time_close * 1000) : [],
+    series: {
+      open: data ? data.map((info) => Number(info.open)) : [],
+      close: data ? data.map((info) => Number(info.close)) : [],
+    },
+  };
+
+  const candleData = {
+    series: data
+      ? data.map((info) => {
+          return {
+            x: new Date(info.time_close * 1000),
+            y: [info.open, info.high, info.low, info.close],
+          };
+        })
+      : [],
   };
 
   return (
@@ -50,7 +68,7 @@ function Chart() {
                   axisTicks: { show: false },
                   labels: { show: false },
                   type: "datetime",
-                  categories: data?.map((info) => info.time_close * 1000),
+                  categories: lineData.xaxis,
                 },
                 yaxis: {
                   axisTicks: { show: true },
@@ -74,11 +92,11 @@ function Chart() {
               series={[
                 {
                   name: "open",
-                  data: data ? data.map((info) => Number(info.open)) : [],
+                  data: lineData.series.open,
                 },
                 {
                   name: "close",
-                  data: data ? data.map((info) => Number(info.close)) : [],
+                  data: lineData.series.close,
                 },
               ]}
             />
@@ -109,14 +127,7 @@ function Chart() {
               series={[
                 {
                   name: "candle",
-                  data: data
-                    ? data?.map((info) => {
-                        return {
-                          x: new Date(info.time_close * 1000),
-                          y: [info.open, info.high, info.low, info.close],
-                        };
-                      })
-                    : [],
+                  data: candleData.series,
                 },
               ]}
             />
