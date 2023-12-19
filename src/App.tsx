@@ -1,3 +1,4 @@
+import React from "react";
 import { RouterProvider } from "react-router-dom";
 import GlobalStyle from "./styles/GlobalStyle";
 import router from "./router";

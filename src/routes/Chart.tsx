@@ -1,3 +1,4 @@
+import React from "react";
 import { useQuery } from "react-query";
 import { ICoinParams, IHistorycal } from "../models/Coin";
 import { coinHistoryApi } from "../api";

@@ -1,3 +1,4 @@
+import React from "react";
 import { ICoinParams } from "../models/Coin";
 
 function Price({ coinId }: ICoinParams) {

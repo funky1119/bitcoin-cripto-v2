@@ -1,6 +1,7 @@
 import { Outlet, useLocation, useMatch, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
+import React from "react";
 import {
   ICoinInfo,
   ICoinParams,
