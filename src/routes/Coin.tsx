@@ -1,4 +1,10 @@
-import { Outlet, useLocation, useMatch, useParams } from "react-router-dom";
+import {
+  Outlet,
+  useLocation,
+  useMatch,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import React from "react";
@@ -11,13 +17,13 @@ import {
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { infoDataApi, priceDataApi } from "../api";
-// import { ReactComponent as ArrowIcon } from "../assets/images/arrow.svg";
 
 function Coin() {
   const { coinId = "" }: ICoinParams = useParams();
   const { state }: ICoinState = useLocation();
   const chartMatch = useMatch("/:coinId/chart");
   const priceMatch = useMatch("/:coinId/price");
+  const navigate = useNavigate();
 
   const { isLoading: infoLoading, data: infoData } = useQuery<ICoinInfo>(
     ["info", coinId],
@@ -33,12 +39,19 @@ function Coin() {
 
   const loading = infoLoading || priceLoading;
 
+  const _onClick = () => {
+    navigate("/");
+  };
+
   return (
     <Container>
       <Helmet>
         <title>{state?.name || (loading ? "Loading" : infoData?.name)}</title>
       </Helmet>
       <Header>
+        <Button onClick={_onClick}>
+          <ArrowIcon width={30} height={30} src="/images/arrow.svg" />
+        </Button>
         <Title>{state?.name || (loading ? "Loading" : infoData?.name)}</Title>
       </Header>
       {loading ? (
@@ -100,9 +113,31 @@ const Header = styled.header`
   align-items: center;
 `;
 
+const Button = styled.button`
+  display: flex;
+  margin-left: 0;
+  margin-right: auto;
+  background-color: inherit;
+  border: inherit;
+  background: inherit;
+  border-radius: 50px;
+  justify-content: center;
+  align-items: center;
+  &:active {
+    background: #ca7b47;
+    color: white;
+    transition: 0.5s;
+  }
+`;
+
+const ArrowIcon = styled.img`
+  transform: rotate(-90deg);
+`;
 const Title = styled.h1`
   font-size: 48px;
   color: ${(props) => props.theme.accentColor};
+  text-align: center;
+  flex: 1;
 `;
 
 const Loader = styled.span`
