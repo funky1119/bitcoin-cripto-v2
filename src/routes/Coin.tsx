@@ -11,6 +11,7 @@ import {
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { infoDataApi, priceDataApi } from "../api";
+// import { ReactComponent as ArrowIcon } from "../assets/images/arrow.svg";
 
 function Coin() {
   const { coinId = "" }: ICoinParams = useParams();
