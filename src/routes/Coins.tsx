@@ -17,7 +17,7 @@ interface ICoin {
 
 function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", coinsApi);
-
+  console.log("data", data);
   return (
     <Container>
       <Helmet>
@@ -30,18 +30,24 @@ function Coins() {
         <Loader>Loading...</Loader>
       ) : (
         <CoinList>
-          {data?.slice(0, 100).map((coin) => (
-            <Coin key={coin.id}>
-              <Link to={coin.id} state={{ name: coin.name }}>
-                <Img
-                  src={`https://cryptocurrencyliveprices.com/img/${coin.id.toLowerCase()}.png`}
-                  // src={`${CONST.COIN_ICON}/${coin.symbol.toLowerCase()}`}
-                  alt={coin.id}
-                />
-                {coin.name} &rarr;
-              </Link>
-            </Coin>
-          ))}
+          {data ? (
+            data?.slice(0, 100).map((coin) => (
+              <Coin key={coin.id}>
+                <Link to={coin.id} state={{ name: coin.name }}>
+                  <Img
+                    src={`https://cryptocurrencyliveprices.com/img/${coin.id.toLowerCase()}.png`}
+                    // src={`${CONST.COIN_ICON}/${coin.symbol.toLowerCase()}`}
+                    alt={coin.id}
+                  />
+                  {coin.name} &rarr;
+                </Link>
+              </Coin>
+            ))
+          ) : (
+            <NoData>
+              데이터를 불러오지 못하였습니다.(API 호출 빈도수 초과)
+            </NoData>
+          )}
         </CoinList>
       )}
     </Container>
@@ -97,4 +103,10 @@ const Title = styled.h1`
 const Loader = styled.span`
   display: block;
   text-align: center;
+`;
+
+const NoData = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
