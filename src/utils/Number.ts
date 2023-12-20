@@ -7,3 +7,9 @@ export const NumberFormat = (value: string | number) => {
     return number;
   }
 };
+
+export const NumberComma = (value: string | number) => {
+  const number = typeof value === "string" ? Number(value) : value;
+
+  return number.toLocaleString("ko-KR");
+};
