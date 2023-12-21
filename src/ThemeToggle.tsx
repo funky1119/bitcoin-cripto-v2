@@ -60,7 +60,6 @@ const Slider = styled.span<{ isToggle: boolean }>`
     left: 4px;
     bottom: 4px;
     background-color: ${(props) => (props.isToggle ? "yellow" : "red")};
-    background-image: url("src/assets/images/moon.png");
     transition: 0.4s;
     border-radius: 50%;
     transform: ${(props) => `translateX(${props.isToggle ? 26 : 0}px)`};

@@ -36,7 +36,7 @@ function Price() {
               <tbody>
                 {data &&
                   data.length > 0 &&
-                  data.reverse().map((info, index) => (
+                  data.map((info, index) => (
                     <tr key={index}>
                       <td>
                         {moment(info.time_close * 1000).format("YYYY.MM.DD")}
