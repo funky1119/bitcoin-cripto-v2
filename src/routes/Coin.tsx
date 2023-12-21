@@ -46,7 +46,7 @@ function Coin() {
   const loading = infoLoading || priceLoading;
 
   const _onClick = () => {
-    navigate("/bitcoin-cripto-v2");
+    navigate("/");
   };
 
   return (

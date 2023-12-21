@@ -18,7 +18,7 @@ function App() {
   return (
     <ThemeProvider theme={theme[applyTheme]}>
       <GlobalStyle />
-      <RouterProvider router={router}></RouterProvider>
+      <RouterProvider router={router} />
       <ReactQueryDevtools initialIsOpen={true} />
       <ThemeToggle onClick={_changeTheme} />
     </ThemeProvider>
