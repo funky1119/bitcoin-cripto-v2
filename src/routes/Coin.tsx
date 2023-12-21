@@ -46,7 +46,7 @@ function Coin() {
   const loading = infoLoading || priceLoading;
 
   const _onClick = () => {
-    navigate("/");
+    navigate("/bitcoin-cripto-v2");
   };
 
   return (
@@ -83,7 +83,9 @@ function Coin() {
             <OverviewItem>
               <span>Price</span>
               <span>
-                ${NumberComma(priceData?.quotes.USD.price.toFixed(3))}
+                {priceData?.quotes
+                  ? `${NumberComma(priceData?.quotes.USD.price.toFixed(3))}`
+                  : 0}
               </span>
             </OverviewItem>
           </Overview>

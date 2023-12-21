@@ -8,19 +8,24 @@ import Chart from "./routes/Chart";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Coins />,
-  },
-  {
-    path: ":coinId",
-    element: <Coin />,
     children: [
       {
-        path: "price",
-        element: <Price />,
+        path: "bitcoin-cripto-v2",
+        element: <Coins />,
       },
       {
-        path: "chart",
-        element: <Chart />,
+        path: "bitcoin-cripto-v2/:coinId",
+        element: <Coin />,
+        children: [
+          {
+            path: "price",
+            element: <Price />,
+          },
+          {
+            path: "chart",
+            element: <Chart />,
+          },
+        ],
       },
     ],
   },
