@@ -21,10 +21,10 @@ function Coins() {
   return (
     <Container>
       <Helmet>
-        <title>코인</title>
+        <title>BangBang Coin</title>
       </Helmet>
       <Header>
-        <Title>코인</Title>
+        <Title>Welcome Coin</Title>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
@@ -69,11 +69,14 @@ const Header = styled.header`
   align-items: center;
 `;
 
-const CoinList = styled.ul``;
+const CoinList = styled.ul`
+  margin: 10px 0;
+`;
 
 const Coin = styled.li`
-  background-color: #6e6c6f;
-  color: white;
+  background-color: ${(props) => props.theme.buttonColor};
+  color: ${(props) => props.theme.textColor};
+  font-weight: 600;
   margin-bottom: 10px;
   border-radius: 10px;
   a {
@@ -96,8 +99,9 @@ const Img = styled.img`
 `;
 
 const Title = styled.h1`
-  font-size: 48px;
+  font-size: 40px;
   color: ${(props) => props.theme.accentColor};
+  margin: 20px 0 10px;
 `;
 
 const Loader = styled.span`

@@ -17,6 +17,11 @@ import {
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { infoDataApi, priceDataApi } from "../api";
+import { NumberComma } from "../utils/Number";
+import ArrowIcon from "../assets/images/ArrowIcon";
+import { theme } from "../theme";
+import { applyThemeState } from "../state/atorms";
+import { useRecoilValue } from "recoil";
 
 function Coin() {
   const { coinId = "btc-bitcoin" }: ICoinParams = useParams();
@@ -36,6 +41,7 @@ function Coin() {
     //   refetchInterval: 5000,
     // }
   );
+  const applyTheme = useRecoilValue(applyThemeState);
 
   const loading = infoLoading || priceLoading;
 
@@ -50,9 +56,16 @@ function Coin() {
       </Helmet>
       <Header>
         <Button onClick={_onClick}>
-          <ArrowIcon width={30} height={30} src="/images/arrow.svg" />
+          <ArrowIcon fill={theme[applyTheme].accentColor} />
         </Button>
-        <Title>{state?.name || (loading ? "Loading" : infoData?.name)}</Title>
+        <HeaderWrapper>
+          <Title>{state?.name || (loading ? "Loading" : infoData?.name)}</Title>
+          <Img
+            src={`https://cryptocurrencyliveprices.com/img/${coinId.toLowerCase()}.png`}
+            // src={`${CONST.COIN_ICON}/${coin.symbol.toLowerCase()}`}
+            alt={coinId}
+          />
+        </HeaderWrapper>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
@@ -69,18 +82,20 @@ function Coin() {
             </OverviewItem>
             <OverviewItem>
               <span>Price</span>
-              <span>${priceData?.quotes.USD.price.toFixed(3)}</span>
+              <span>
+                ${NumberComma(priceData?.quotes.USD.price.toFixed(3))}
+              </span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>
           <Overview>
             <OverviewItem>
               <span>Total Suply</span>
-              <span>{priceData?.total_supply}</span>
+              <span>{NumberComma(priceData?.total_supply)}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Max Suply</span>
-              <span>{priceData?.max_supply}</span>
+              <span>{NumberComma(priceData?.max_supply)}</span>
             </OverviewItem>
           </Overview>
 
@@ -123,21 +138,27 @@ const Button = styled.button`
   border-radius: 50px;
   justify-content: center;
   align-items: center;
-  &:active {
-    background: #ca7b47;
-    color: white;
-    transition: 0.5s;
-  }
 `;
 
-const ArrowIcon = styled.img`
-  transform: rotate(-90deg);
+const Img = styled.img`
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  color: ${(props) => props.theme.iconButton};
 `;
+<ArrowIcon />;
+
+const HeaderWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Title = styled.h1`
   font-size: 48px;
   color: ${(props) => props.theme.accentColor};
   text-align: center;
-  flex: 1;
 `;
 
 const Loader = styled.span`
@@ -148,7 +169,7 @@ const Loader = styled.span`
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: rgba(183, 77, 25, 0.5);
+  background-color: ${(props) => props.theme.buttonColor};
   padding: 10px 20px;
   align-items: center;
   border-radius: 10px;
@@ -182,9 +203,9 @@ const Tab = styled.span<{ isActive: boolean }>`
   font-size: 12px;
   font-weight: ${(props) => (props.isActive ? 700 : 400)};
   background-color: ${(props) =>
-    props.isActive ? "rgba(234, 186, 27, 0.5)" : "rgba(183, 77, 25, 0.5)"};
+    props.isActive ? props.theme.activeButtonColor : props.theme.buttonColor};
   padding: 7px 0;
-  border: 1px solid rgba(183, 77, 25, 0.5);
+  border: 1px solid ${(props) => props.theme.buttonColor};
   border-radius: 10px;
   a {
     display: block;

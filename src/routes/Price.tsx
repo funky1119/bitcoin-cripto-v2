@@ -9,8 +9,9 @@ import { NumberComma } from "../utils/Number";
 
 function Price() {
   const { coinId } = useOutletContext<ICoinParams>();
-  const { isLoading, data } = useQuery<IHistorycal[]>(["ohlcv", coinId], () =>
-    coinHistoryApi(coinId)
+  const { isLoading, data } = useQuery<IHistorycal[] & { error: string }>(
+    ["ohlcv", coinId],
+    () => coinHistoryApi(coinId)
   );
 
   return (
@@ -18,30 +19,38 @@ function Price() {
       {isLoading ? (
         "Loading chart..."
       ) : (
-        <Table>
-          <Thead>
-            <tr>
-              <th>Date</th>
-              <th>Open</th>
-              <th>High</th>
-              <th>Low</th>
-              <th>Close</th>
-            </tr>
-          </Thead>
-          <Tbody>
-            {data &&
-              data.length > 0 &&
-              data.map((info, index) => (
-                <tr key={index}>
-                  <td>{moment(info.time_close * 1000).format("YYYY.MM.DD")}</td>
-                  <td>${NumberComma(info.open)}</td>
-                  <td>${NumberComma(info.high)}</td>
-                  <td>${NumberComma(info.low)}</td>
-                  <td>${NumberComma(info.close)}</td>
+        <>
+          {data?.error ? (
+            <Error>{data.error}</Error>
+          ) : (
+            <Table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Open</th>
+                  <th>High</th>
+                  <th>Low</th>
+                  <th>Close</th>
                 </tr>
-              ))}
-          </Tbody>
-        </Table>
+              </thead>
+              <tbody>
+                {data &&
+                  data.length > 0 &&
+                  data.map((info, index) => (
+                    <tr key={index}>
+                      <td>
+                        {moment(info.time_close * 1000).format("YYYY.MM.DD")}
+                      </td>
+                      <td>{NumberComma(info.open)}</td>
+                      <td>{NumberComma(info.high)}</td>
+                      <td>{NumberComma(info.low)}</td>
+                      <td>{NumberComma(info.close)}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </Table>
+          )}
+        </>
       )}
     </div>
   );
@@ -74,7 +83,13 @@ const Table = styled.table`
     }
   }
 `;
-const Thead = styled.thead``;
-const Tbody = styled.tbody``;
+
+const Error = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  padding: 20px;
+`;
 
 export default Price;

@@ -1,23 +1,27 @@
-import React from "react";
 import { RouterProvider } from "react-router-dom";
 import GlobalStyle from "./styles/GlobalStyle";
 import router from "./router";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-
-const queryClient = new QueryClient();
+import ThemeToggle from "./ThemeToggle";
+import { useRecoilState } from "recoil";
+import { applyThemeState } from "./state/atorms";
 
 function App() {
+  const [applyTheme, setApplyTheme] = useRecoilState(applyThemeState);
+  const _changeTheme = () => {
+    const type = applyTheme === "light" ? "dark" : "light";
+    setApplyTheme(type);
+  };
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <RouterProvider router={router}></RouterProvider>
-        <ReactQueryDevtools initialIsOpen={true} />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <ThemeProvider theme={theme[applyTheme]}>
+      <GlobalStyle />
+      <RouterProvider router={router}></RouterProvider>
+      <ReactQueryDevtools initialIsOpen={true} />
+      <ThemeToggle onClick={_changeTheme} />
+    </ThemeProvider>
   );
 }
 

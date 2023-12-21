@@ -8,7 +8,8 @@ export const NumberFormat = (value: string | number) => {
   }
 };
 
-export const NumberComma = (value: string | number) => {
+export const NumberComma = (value?: string | number) => {
+  if (!value) return "0";
   const number = typeof value === "string" ? Number(value) : value;
 
   return number.toLocaleString("ko-KR");
