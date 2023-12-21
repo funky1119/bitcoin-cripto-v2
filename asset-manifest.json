@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/bitcoin-cripto-v2/static/js/main.67840c21.js",
+    "index.html": "/bitcoin-cripto-v2/index.html",
+    "main.67840c21.js.map": "/bitcoin-cripto-v2/static/js/main.67840c21.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.67840c21.js"
+  ]
+}
